@@ -301,28 +301,27 @@ public class ScreenMovies extends javax.swing.JInternalFrame {
     private void jTextPesqKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextPesqKeyReleased
 
         connection = ModuloConexao.conector();
+        String sql = "select * from filmes where titulo like ?";
         String list = "";
-        String sql = "select * from filmes where titulo like ? ";
-
-        try {
+        try{
             stmt = connection.prepareStatement(sql);
-            stmt.setString(1,"%"+jTextPesq.getText()+"%");
-            rs = stmt.executeQuery(sql);
-
-            while (rs.next()) {
-
+            stmt.setString(1, "%"+jTextPesq.getText()+"%");
+            rs = stmt.executeQuery();
+            while(rs.next()){
                 list += "ID: " + rs.getString(1) + "\n Título: " + rs.getString(2) + "\n Direção: " + rs.getString(3) + "\n Genero: " + rs.getString(4)
                         + "    Ano: " + rs.getString(5) + "    Duração: " + rs.getString(6) + "\n Atores: " + rs.getString(7)
-                        + "\n----------------------------------------------------\n"
-                        + "----------------------------------------------------\n";
-
+                        + "\n------------------------------------------------------------------------\n"
+                        + "------------------------------------------------------------------------\n";
             }
+            
             jTextList.setText(list);
-
-        } catch (Exception ex) {
+            
+        }catch(Exception ex){
+            
             JOptionPane.showMessageDialog(null, ex.getMessage());
+            
         }
-
+        
 
     }//GEN-LAST:event_jTextPesqKeyReleased
 
