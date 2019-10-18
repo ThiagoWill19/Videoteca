@@ -113,6 +113,13 @@ public class Filme {
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "Filme{" + "id=" + id + ", titulo=" + titulo + ", direcao=" +
+                direcao + ", genero=" + genero + ", ano=" + ano + ", duracao=" +
+                duracao + ", atorPrincipal=" + atorPrincipal + '}';
+    }
     
     
     
