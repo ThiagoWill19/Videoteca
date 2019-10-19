@@ -21,9 +21,11 @@ public class FilmeDAL {
 
     private final String LIST = "select * from filmes";
     private final String LISTBYID = "select * from filmes where id= ?";
-    private final String INSERT = "insert into filmes values(?,?,?,?,?,?,?)";
+    private final String LISTBYTITLE = "select * from filmes where titulo = ?";
+    private final String INSTANTSEARCH = "select * from filmes where titulo like ?";
+    private final String INSERT = "insert into filmes ( titulo, direcao, genero, ano, duracao, atorPrincipal )values(?,?,?,?,?,?)";
     private final String REMOVE = "delete from filmes where id= ?";
-    private final String UPDATE = "update contato set (?,?,?,?,?,?) where id= ?";
+    private final String UPDATE = "update filmes set titulo= ?, direcao= ?, genero= ?, ano= ?, duracao= ?, atorPrincipal= ? where id = ?";
 
     public void insert(Filme filme) {
 
@@ -34,14 +36,13 @@ public class FilmeDAL {
                 conn = ModuloConexao.conector();
                 PreparedStatement stmt;
                 stmt = conn.prepareStatement(INSERT);
-
-                stmt.setString(1, null);
-                stmt.setString(2, filme.getTitulo());
-                stmt.setString(3, filme.getDirecao());
-                stmt.setString(4, filme.getGenero());
-                stmt.setString(5, filme.getAno());
-                stmt.setString(6, "" + filme.getDuracao());
-                stmt.setString(7, filme.getAtorPrincipal());
+  
+                stmt.setString(1, filme.getTitulo());
+                stmt.setString(2, filme.getDirecao());
+                stmt.setString(3, filme.getGenero());
+                stmt.setString(4, filme.getAno());
+                stmt.setInt(5, filme.getDuracao());
+                stmt.setString(6, filme.getAtorPrincipal());
 
                 stmt.execute();
                 JOptionPane.showMessageDialog(null, "Filme cadastrado!");
@@ -71,16 +72,16 @@ public class FilmeDAL {
                 stmt.setString(2, filme.getDirecao());
                 stmt.setString(3, filme.getGenero());
                 stmt.setString(4, filme.getAno());
-                stmt.setString(5, "" + filme.getDuracao());
+                stmt.setInt(5, filme.getDuracao());
                 stmt.setString(6, filme.getAtorPrincipal());
-                stmt.setString(7, filme.getId() + "");
+                stmt.setInt(7, filme.getId());
 
                 stmt.execute();
                 JOptionPane.showMessageDialog(null, "Filme cadastrado com sucesso!");
                 stmt.close();
 
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Erro ao cadastrar! " + e.getMessage());
+                JOptionPane.showMessageDialog(null, "Erro ao atualizar! " + e.getMessage());
             }
         } else {
 
@@ -97,8 +98,7 @@ public class FilmeDAL {
             stmt = conn.prepareStatement(REMOVE);
             stmt.setInt(1, id);
             boolean stts = stmt.execute();
-            if(stts)JOptionPane.showMessageDialog(null, "Excluido!");
-                else JOptionPane.showMessageDialog(null, "ID não encontrado!");
+            JOptionPane.showMessageDialog(null, "Título excluido!");
             stmt.close();
 
         } catch (Exception e) {
@@ -156,7 +156,7 @@ public class FilmeDAL {
             stmt.setInt(1, id);
             rs = stmt.executeQuery();
 
-            while (rs.next()) {
+            if(rs.next()) {
 
                 f.setId(rs.getInt(1));
                 f.setTitulo(rs.getString(2));
@@ -180,4 +180,75 @@ public class FilmeDAL {
 
     }
 
+    public int findByTitle(String name) {
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        int id = 0;
+
+        try {
+            conn = ModuloConexao.conector();
+            stmt = conn.prepareStatement(LISTBYTITLE);
+            stmt.setString(1, name);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+
+                id = rs.getInt(1);
+        
+            }
+            
+            conn.close();
+
+        } catch (Exception e) {
+            
+            JOptionPane.showMessageDialog(null, "Erro ao buscar dados");
+            
+        }
+        
+        return id;
+
+    }
+    
+    public List<Filme> instantSearch(String name) {
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<Filme> list = new ArrayList<>();
+
+        try {
+            conn = ModuloConexao.conector();
+            stmt = conn.prepareStatement(INSTANTSEARCH);
+            stmt.setString(1, "%"+name+"%");
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+
+                Filme f = new Filme();
+                f.setId(rs.getInt(1));
+                f.setTitulo(rs.getString(2));
+                f.setDirecao(rs.getString(3));
+                f.setGenero(rs.getString(4));
+                f.setAno(rs.getString(5));
+                f.setDuracao(rs.getInt(6));
+                f.setAtorPrincipal(rs.getString(7));
+
+                list.add(f);
+        
+            }
+            
+            conn.close();
+
+        } catch (Exception e) {
+            
+            JOptionPane.showMessageDialog(null, "Erro ao buscar dados "+e.getMessage() );
+            
+        }
+        
+        return list;
+
+    }
+    
 }

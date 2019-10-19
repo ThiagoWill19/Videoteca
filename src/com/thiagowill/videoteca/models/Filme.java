@@ -11,7 +11,7 @@ package com.thiagowill.videoteca.models;
  */
 public class Filme {
 
-    private Integer id;
+    private int id;
     private String titulo;
     private String direcao;
     private String genero;

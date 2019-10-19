@@ -5,19 +5,24 @@
  */
 package com.thiagowill.videoteca.forms;
 
+import com.thiagowill.videoteca.dal.ModuloConexao;
+import java.sql.Connection;
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author thiago
  */
 public class MainScreen extends javax.swing.JFrame {
 
-    
-     ScreenMovies tf = new ScreenMovies();
+    Connection conn = null;
+    MovieScreen tf = new MovieScreen();
     /**
      * Creates new form MainFrame
      */
     public MainScreen() {
         initComponents();
+        testConnection();
     }
 
     /**
@@ -33,7 +38,7 @@ public class MainScreen extends javax.swing.JFrame {
         jDesktop = new javax.swing.JDesktopPane();
         jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lbIcon = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -61,7 +66,7 @@ public class MainScreen extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
         jLabel1.setText("VIDEOTECA");
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/thiagowill/videoteca/icons/iconfinder_database-delete.png"))); // NOI18N
+        lbIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/thiagowill/videoteca/icons/iconfinder_database-delete.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -78,7 +83,7 @@ public class MainScreen extends javax.swing.JFrame {
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(32, 32, 32))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
+                        .addComponent(lbIcon)
                         .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
@@ -89,7 +94,7 @@ public class MainScreen extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 304, Short.MAX_VALUE)
-                .addComponent(jLabel2)
+                .addComponent(lbIcon)
                 .addContainerGap())
             .addComponent(jDesktop)
         );
@@ -173,11 +178,22 @@ public class MainScreen extends javax.swing.JFrame {
             }
         });
     }
+    
+   
+    public void testConnection(){
+        conn = ModuloConexao.conector();
+
+        ImageIcon image1 = new ImageIcon(this.getClass().getResource("/com/thiagowill/videoteca/icons/iconfinder_database-delete.png"));
+        ImageIcon image2 = new ImageIcon(this.getClass().getResource("/com/thiagowill/videoteca/icons/iconfinder_database-accep.png"));
+        if(conn == null){
+           lbIcon.setIcon(image1);
+           
+        }else lbIcon.setIcon(image2);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane jDesktop;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
@@ -185,5 +201,6 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lbIcon;
     // End of variables declaration//GEN-END:variables
 }
