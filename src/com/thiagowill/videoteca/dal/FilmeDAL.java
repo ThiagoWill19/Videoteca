@@ -137,7 +137,7 @@ public class FilmeDAL {
 
             conn.close();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao buscar dados");
+            JOptionPane.showMessageDialog(null, "Erro ao buscar dados!\n" + e.getMessage());
         }
         return list;
 

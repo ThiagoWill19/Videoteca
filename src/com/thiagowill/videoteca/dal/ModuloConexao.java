@@ -29,7 +29,7 @@ public class ModuloConexao {
             conexao = DriverManager.getConnection(url, user, password);
             return conexao;
         }catch(Exception ex){
-            JOptionPane.showMessageDialog(null, ex.getMessage());
+            JOptionPane.showMessageDialog(null,"Sem conexão com banco de dados!\n"+ ex.getMessage());
             return null;
         }
     }
